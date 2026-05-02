@@ -1,0 +1,30 @@
+name: Run Maps Scraper
+
+on:
+  workflow_dispatch: # Isse "Run" button aayega
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Tools
+        run: |
+          pip install playwright pandas
+          playwright install chromium
+
+      - name: Run Script
+        run: python maps_scraper.py
+
+      - name: Save Data
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraped-csv
+          path: google_maps_leads.csv
